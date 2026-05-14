@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Weather App</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      overflow:hidden;
+    }
+
+    /* Background Glow */
+    body::before{
+      content:'';
+      position:absolute;
+      width:500px;
+      height:500px;
+      background:rgba(0,255,255,0.15);
+      border-radius:50%;
+      top:-100px;
+      left:-100px;
+      filter:blur(120px);
+    }
+
+    body::after{
+      content:'';
+      position:absolute;
+      width:400px;
+      height:400px;
+      background:rgba(0,140,255,0.18);
+      border-radius:50%;
+      bottom:-120px;
+      right:-100px;
+      filter:blur(120px);
+    }
+
+    .weather-app{
+      position:relative;
+      width:380px;
+      padding:30px;
+      border-radius:30px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,0.15);
+      box-shadow:0 10px 40px rgba(0,0,0,0.35);
+      color:white;
+      z-index:1;
+    }
+
+    .search-box{
+      display:flex;
+      gap:12px;
+      margin-bottom:25px;
+    }
+
+    .search-box input{
+      flex:1;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      background:rgba(255,255,255,0.12);
+      color:white;
+      font-size:16px;
+      transition:0.3s;
+    }
+
+    .search-box input:focus{
+      background:rgba(255,255,255,0.18);
+    }
+
+    .search-box input::placeholder{
+      color:#ccc;
+    }
+
+    .search-box button{
+      border:none;
+      padding:14px 18px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#00c6ff,#0072ff);
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 4px 15px rgba(0,114,255,0.4);
+    }
+
+    .search-box button:hover{
+      transform:translateY(-2px);
+      box-shadow:0 6px 20px rgba(0,114,255,0.6);
+    }
+
+    .weather-info{
+      text-align:center;
+    }
+
+    .weather-icon{
+      font-size:90px;
+      margin:10px 0;
+      animation:float 3s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+      100%{transform:translateY(0);}
+    }
+
+    .temperature{
+      font-size:65px;
+      font-weight:700;
+      margin-top:5px;
+    }
+
+    .city{
+      font-size:32px;
+      font-weight:600;
+      margin-top:5px;
+    }
+
+    .description{
+      font-size:18px;
+      color:#d8d8d8;
+      margin-top:8px;
+      margin-bottom:25px;
+      letter-spacing:1px;
+    }
+
+    .details{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+    }
+
+    .card{
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(8px);
+      transition:0.3s;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.15);
+    }
+
+    .card h3{
+      font-size:15px;
+      color:#ddd;
+      margin-bottom:10px;
+    }
+
+    .card p{
+      font-size:24px;
+      font-weight:600;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="weather-app">
+
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Search city...">
+      <button onclick="getWeather()">🔍</button>
+    </div>
+
+    <div class="weather-info">
+
+      <div class="weather-icon" id="icon">☀️</div>
+
+      <div class="temperature" id="temp">28°C</div>
+
+      <div class="city" id="city">Guwahati</div>
+
+      <div class="description" id="desc">
+        Clear Sky
+      </div>
+
+      <div class="details">
+
+        <div class="card">
+          <h3>Humidity</h3>
+          <p id="humidity">65%</p>
+        </div>
+
+        <div class="card">
+          <h3>Wind Speed</h3>
+          <p id="wind">12 km/h</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    function getWeather(){
+
+      const city =
+      document.getElementById("cityInput").value;
+
+      if(city === ""){
+        alert("Please enter a city name");
+        return;
+      }
+
+      document.getElementById("city").innerText = city;
+
+      const temperatures = [
+        "22°C","25°C","28°C","31°C","19°C"
+      ];
+
+      const descriptions = [
+        "Sunny",
+        "Cloudy",
+        "Rainy",
+        "Stormy",
+        "Windy"
+      ];
+
+      const icons = [
+        "☀️",
+        "☁️",
+        "🌧️",
+        "⛈️",
+        "💨"
+      ];
+
+      let random =
+      Math.floor(Math.random()*5);
+
+      document.getElementById("temp").innerText =
+      temperatures[random];
+
+      document.getElementById("desc").innerText =
+      descriptions[random];
+
+      document.getElementById("icon").innerText =
+      icons[random];
+
+      document.getElementById("humidity").innerText =
+      Math.floor(Math.random()*40 + 40) + "%";
+
+      document.getElementById("wind").innerText =
+      Math.floor(Math.random()*20 + 5) + " km/h";
+    }
+
+  </script>
+
+</body>
+</html>
